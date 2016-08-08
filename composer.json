@@ -1,0 +1,14 @@
+{
+    "name": "zkrati/router",
+    "description": "PHP router as simple as can be",
+    "type": "library",
+    "license": "GNU GPL",
+    "authors": [
+        {
+            "name": "Boomerank",
+            "email": "info@boomerank.cz"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
