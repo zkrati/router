@@ -25,6 +25,9 @@ class Route
     /** Pattern for parsing variables from path string */
     const VARIABLE_PATTERN = '#<(.*?)>#';
 
+    /** Internal variable identifir  */
+    const VARIABLE = 'var:';
+
     /**
      * Route constructor.
      *
@@ -75,10 +78,10 @@ class Route
 
         $variables = [];
         foreach($path as $key => $part){
-            if($this->pattern[$key] !== null AND $this->pattern[$key] != $part){
+            if(strpos($this->pattern[$key], self::VARIABLE) === false AND $this->pattern[$key] != $part){
                 return false;
-            } else if($this->pattern[$key] === null){
-                $variables[] = $part;
+            } else if(strpos($this->pattern[$key], self::VARIABLE) !== false){
+                $variables[str_replace(self::VARIABLE, "", $this->pattern[$key])] = $part;
             }
         }
 
@@ -92,7 +95,7 @@ class Route
      * @return array
      */
     function matchedVariables() {
-        return $this->matchedVariables;
+        return array($this->matchedVariables);
     }
 
     /**
@@ -108,7 +111,7 @@ class Route
 
         foreach($pattern as $key => $part){
             if(preg_match(self::VARIABLE_PATTERN, $part)){
-                $pattern[$key] = null;
+                $pattern[$key] = self::VARIABLE . str_replace("<", "", str_replace(">", "", $pattern[$key]));
                 $this->varKeys[] = $key;
             }
         }
