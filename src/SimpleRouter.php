@@ -3,7 +3,7 @@ namespace Zkrati\Routing;
 
 /**
  * Class SimpleRouter
- * @package ZkratiServices\Routing
+ * @package Zkrati\Routing
  */
 class SimpleRouter
 {

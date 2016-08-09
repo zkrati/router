@@ -12,6 +12,6 @@
     "minimum-stability": "dev",
     "require": {},
     "autoload" : {
-        "psr-0" : {"zkrati\\" : "src/"}
+        "psr-4" : {"Zkrati\\Routing\\" : "src/"}
     }
 }

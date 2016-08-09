@@ -3,7 +3,7 @@ namespace Zkrati\Routing;
 
 /**
  * Class Route
- * @package ZkratiServices\Routing
+ * @package Zkrati\Routing
  */
 class Route
 {
@@ -22,7 +22,7 @@ class Route
     /** @var callable */
     private $handler;
 
-    /** Pattern for parsing variables from path string*/
+    /** Pattern for parsing variables from path string */
     const VARIABLE_PATTERN = '#<(.*?)>#';
 
     /**
