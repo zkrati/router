@@ -79,6 +79,8 @@ class SimpleRouter
 
     /**
      * Render response for request
+     *
+     * @throws RouteNotFoundException
      */
     public function run()
     {
@@ -90,8 +92,7 @@ class SimpleRouter
             }
         }
 
-        // todo better error resolutions
-        echo "error 404";
+        throw new RouteNotFoundException("No route found for " . $this->getPath());
     }
 
     /**
