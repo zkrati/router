@@ -19,26 +19,29 @@ class Route
     /** @var string */
     private $path;
 
-    /** @var callable */
-    private $handler;
+    /** @var array */
+    private $handler = [];
 
     /** Pattern for parsing variables from path string */
     const VARIABLE_PATTERN = '#<(.*?)>#';
 
-    /** Internal variable identifir  */
+    /** Pattern for parsing variables from path string */
+    const CLASS_PATTERN = ':';
+
+    /** Internal variable identifier */
     const VARIABLE = 'var:';
 
     /**
      * Route constructor.
      *
      * @param string $pattern
-     * @param callable $handler
+     * @param mixed $handler
      */
-    public function __construct($pattern, callable $handler)
+    public function __construct($pattern, $handler)
     {
-        $this->pattern = $this->prepare($pattern);
         $this->path = $pattern;
-        $this->handler = $handler;
+        $this->pattern = $this->preparePattern($pattern);
+        $this->handler = $this->prepareHandler($handler);
     }
 
     /**
@@ -104,7 +107,7 @@ class Route
      * @param string $pattern
      * @return array
      */
-    private function prepare($pattern)
+    private function preparePattern($pattern)
     {
         $pattern = explode("/", rtrim($pattern, "/"));
         array_shift($pattern);
@@ -117,5 +120,27 @@ class Route
         }
 
         return $pattern;
+    }
+
+    public function prepareHandler($handler)
+    {
+        if(is_callable($handler)){
+            return array(
+                "type" => "callable",
+                "action" => $handler
+            );
+        } else if(is_string($handler) AND strpos($handler, self::CLASS_PATTERN) !== false){
+            return array(
+                "type" => "class",
+                "action" => explode(":", $handler)
+            );
+        } else if(is_array($handler) AND is_object($handler[0]) AND is_callable($handler[1])){
+            return array(
+                "type" => "instance",
+                "action" => $handler
+            );
+        }
+
+        throw new InvalidHandlerException("Invalid handler for " . $this->getPath());
     }
 }

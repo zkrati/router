@@ -25,10 +25,10 @@ class SimpleRouter
     /**
      * Map a GET request to a handler
      *
-     * @param string $pattern Matched route pattern
-     * @param callable $action Callback that returns the response when matched
+     * @param string $pattern
+     * @param mixed $action
      */
-    public function get($pattern, callable $action)
+    public function get($pattern, $action)
     {
         $this->controllers['GET'][] = new Route($pattern, $action);
     }
@@ -36,10 +36,10 @@ class SimpleRouter
     /**
      * Map a POST request to a handler
      *
-     * @param string $pattern Matched route pattern
-     * @param callable $action Callback that returns the response when matched
+     * @param string $pattern
+     * @param mixed $action
      */
-    public function post($pattern, callable $action)
+    public function post($pattern, $action)
     {
         $this->controllers['POST'][] = new Route($pattern, $action);
     }
@@ -47,10 +47,10 @@ class SimpleRouter
     /**
      * Map a PUT request to a handler
      *
-     * @param string $pattern Matched route pattern
-     * @param callable $action Callback that returns the response when matched
+     * @param string $pattern
+     * @param mixed $action
      */
-    public function put($pattern, callable $action)
+    public function put($pattern, $action)
     {
         $this->controllers['PUT'][] = new Route($pattern, $action);
     }
@@ -58,10 +58,10 @@ class SimpleRouter
     /**
      * Map a DELETE request to a handler
      *
-     * @param string $pattern Matched route pattern
-     * @param callable $action Callback that returns the response when matched
+     * @param string $pattern
+     * @param mixed $action
      */
-    public function delete($pattern, callable $action)
+    public function delete($pattern, $action)
     {
         $this->controllers['DELETE'][] = new Route($pattern, $action);
     }
@@ -69,10 +69,10 @@ class SimpleRouter
     /**
      * Map a PATCH request to a handler
      *
-     * @param string $pattern Matched route pattern
-     * @param callable $action Callback that returns the response when matched
+     * @param string $pattern
+     * @param mixed $action
      */
-    public function patch($pattern, callable $action)
+    public function patch($pattern, $action)
     {
         $this->controllers['PATCH'][] = new Route($pattern, $action);
     }
@@ -87,7 +87,15 @@ class SimpleRouter
         foreach($this->controllers[$this->getMethod()] as $url){
             $match = $url->match($this->getPath());
             if($match){
-                echo call_user_func_array($url->getHandler(), $url->matchedVariables());
+                $handler = $url->getHandler();
+                if($handler["type"] == "callable"){
+                    echo call_user_func_array($handler["action"], $url->matchedVariables());
+                } else if($handler["type"] == "class"){
+                    $class = new $handler["action"][0]();
+                    echo call_user_func_array(array($class, $handler["action"][1]), $url->matchedVariables());
+                } else {
+                    echo call_user_func_array(array($handler["action"][0], $handler["action"][1]), $url->matchedVariables());
+                }
                 return;
             }
         }

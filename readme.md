@@ -7,7 +7,7 @@ PHP router as simple as can be...
   - supports GET, POST, PUT, DELETE and PATCH requests
 
 ### Version
-0.1
+0.2
 
 
 ### Basic usage
@@ -27,23 +27,65 @@ $router->run();
 ```
  simple right?
  
+ You can also use other handler declarations
+```php
+$router->get("/test/path", "Class:methodName");
+// this code will create an instance of Class and call it's method methodName
+
+$router->get("/test/path", "Namespace\Class:methodName");
+// if you are using namespaces
+```
+
+If you need to create your own instance for some reason, you can pass the created instance
+```php
+$instance = new Class();
+$router->get("/testuju/path", array($instance, "methodName"));
+// this code will use the given instance of Class and call it's method methodName
+```
  
 ### Variables
 
+You will propably need to map routes with some varibles in it. It was never been easier.
 ```php
-$router->get("/test/<variable>/<next_variable>/path", function($variable, $next_variable) {
-    // handle GET request at /test/whatever/whatever/path
-    // variables $variable and $next_variable are available here 
+$router->get("/test/<variable>/<next_variable>/path", function($variables) {
+    // variables <variable> and <next_variable> are available in array $variables by it's keys
+    // for example with url /test/example/showcase/path
+    
+    echo $variables["variable"];      // will output "example"
+    echo $variables["next_variable"]; // will output "showcase"
 });
 
 ```
 
+### Exceptions
+
+It is a good idea to wrap route declarations into try catch because in case of invalid handler it will throw InvalidHandlerException
+```php
+try{
+
+    $router->get("/test/", "Class:firstMethod");
+    $router->get("/other/route", "Class:secondMethod");
+    $router->get("/cool/route", "invalid handler");
+    
+} catch(InvalidHandlerException $e) {
+    echo $e->getMessage();
+}
+```
+
+also $router->run(); throws RouteNotFoundException when it founds no route for current url
+```php
+try{
+    $router->run();
+} catch(Routing\RouteNotFoundException $e) {
+    echo $e->getMessage();
+}
+```
+
 ### Todos
 
- - better error handling
- - add cache support
  - define variable types and regexp
+ - add cache support
 
 License
 ----
-GNU GPL
+MIT
