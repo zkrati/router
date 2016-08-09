@@ -82,13 +82,11 @@ class SimpleRouter
      */
     public function run()
     {
-        foreach($this->controllers as $method){
-            foreach($method as $url){
-                $match = $url->match($this->getPath());
-                if($match){
-                    echo call_user_func_array($url->getHandler(), $url->matchedVariables());
-                    return;
-                }
+        foreach($this->controllers[$this->getMethod()] as $url){
+            $match = $url->match($this->getPath());
+            if($match){
+                echo call_user_func_array($url->getHandler(), $url->matchedVariables());
+                return;
             }
         }
 
@@ -103,6 +101,15 @@ class SimpleRouter
      */
     private function getPath() {
         return rtrim(str_replace(str_replace("index.php", "", $_SERVER['PHP_SELF']), "/", $_SERVER['REQUEST_URI']), "/");
+    }
+
+    /**
+     * Get request method
+     *
+     * @return string
+     */
+    private function getMethod() {
+        return $_SERVER['REQUEST_METHOD'];
     }
 
 }
