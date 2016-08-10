@@ -81,6 +81,14 @@ try{
 }
 ```
 
+### Instances
+
+If you have custom class in your app which manages instances of all other classes and you want tou use string handler definition you can pass your instantiator into router. The router will get class instances from your custom instantiator.
+```php
+$router->setInstantiator($instantiator, "getInstance");
+// where $instantiator is your custom instantiator and "getInstance" is name of it´s method to get instance
+```
+
 ### Todos
 
  - define variable types and regexp

@@ -10,6 +10,9 @@ class SimpleRouter
     /** @var array */
     private $controllers = [];
 
+    /** @var array|null */
+    private $instantiator = null;
+
     /**
      * SimpleRouter constructor.
      *
@@ -91,7 +94,12 @@ class SimpleRouter
                 if($handler["type"] == "callable"){
                     echo call_user_func_array($handler["action"], $url->matchedVariables());
                 } else if($handler["type"] == "class"){
-                    $class = new $handler["action"][0]();
+                    if($this->instantiator != null){
+                        $method = $this->instantiator["method"];
+                        $class = $this->instantiator["class"]->$method($handler["action"][0]);
+                    } else {
+                        $class = new $handler["action"][0]();
+                    }
                     echo call_user_func_array(array($class, $handler["action"][1]), $url->matchedVariables());
                 } else {
                     echo call_user_func_array(array($handler["action"][0], $handler["action"][1]), $url->matchedVariables());
@@ -101,6 +109,20 @@ class SimpleRouter
         }
 
         throw new RouteNotFoundException("No route found for " . $this->getPath());
+    }
+
+    /**
+     * Set custom instance creator
+     *
+     * @param object $instantiator
+     * @param string $getter
+     */
+    public function setInstantiator($instantiator, $getter)
+    {
+        $this->instantiator = array(
+            "class" => $instantiator,
+            "method" => $getter
+        );
     }
 
     /**
