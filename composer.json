@@ -2,7 +2,7 @@
     "name": "zkrati/router",
     "description": "PHP router as simple as can be",
     "type": "library",
-    "license": "GNU GPL",
+    "license": "MIT",
     "authors": [
         {
             "name": "Boomerank",
