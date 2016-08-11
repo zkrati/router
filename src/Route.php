@@ -129,7 +129,7 @@ class Route
                 "type" => "callable",
                 "action" => $handler
             );
-        } else if(is_string($handler) AND strpos($handler, self::CLASS_PATTERN) !== false){
+        } else if(is_string($handler) AND strpos($handler, self::CLASS_PATTERN) !== false AND is_callable(explode(":", $handler))){
             return array(
                 "type" => "class",
                 "action" => explode(":", $handler)
