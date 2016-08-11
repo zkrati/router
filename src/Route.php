@@ -122,6 +122,13 @@ class Route
         return $pattern;
     }
 
+    /**
+     * Prepare route handler
+     *
+     * @param $handler
+     * @return array
+     * @throws InvalidHandlerException
+     */
     public function prepareHandler($handler)
     {
         if(is_callable($handler)){
