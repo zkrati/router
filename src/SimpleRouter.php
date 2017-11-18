@@ -91,8 +91,12 @@ class SimpleRouter
             $match = $url->match($this->getPath());
             if($match){
                 $handler = $url->getHandler();
+                $params = array(
+                    $url->matchedVariables(),
+                    $this->getHeaders()
+                );
                 if($handler["type"] == "callable"){
-                    echo call_user_func_array($handler["action"], $url->matchedVariables());
+                    echo call_user_func_array($handler["action"], $params);
                 } else if($handler["type"] == "class"){
                     if($this->instantiator != null){
                         $method = $this->instantiator["method"];
@@ -100,9 +104,9 @@ class SimpleRouter
                     } else {
                         $class = new $handler["action"][0]();
                     }
-                    echo call_user_func_array(array($class, $handler["action"][1]), $url->matchedVariables());
+                    echo call_user_func_array(array($class, $handler["action"][1]), $params);
                 } else {
-                    echo call_user_func_array(array($handler["action"][0], $handler["action"][1]), $url->matchedVariables());
+                    echo call_user_func_array(array($handler["action"][0], $handler["action"][1]), $params);
                 }
                 return;
             }
@@ -141,6 +145,15 @@ class SimpleRouter
      */
     private function getMethod() {
         return $_SERVER['REQUEST_METHOD'];
+    }
+
+    /**
+     * Get request headers
+     *
+     * @return array
+     */
+    private function getHeaders() {
+        return getallheaders();
     }
 
 }

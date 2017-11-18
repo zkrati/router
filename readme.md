@@ -7,7 +7,7 @@ PHP router as simple as can be...
   - supports GET, POST, PUT, DELETE and PATCH requests
 
 ### Version
-0.2
+0.4
 
 
 ### Basic usage
@@ -53,6 +53,16 @@ $router->get("/test/<variable>/<next_variable>/path", function($variables) {
     
     echo $variables["variable"];      // will output "example"
     echo $variables["next_variable"]; // will output "showcase"
+});
+
+```
+ 
+### Headers
+
+Sometimes is useful to know the request headers. You don't need to search it somewhere anymore. Just add second parameter to your handler function.
+```php
+$router->get("/test/<variable>/<next_variable>/path", function($variables, $headers) {
+    // variable $headers is array which contains all request headers 
 });
 
 ```
