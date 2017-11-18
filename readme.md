@@ -57,11 +57,25 @@ $router->get("/test/<variable>/<next_variable>/path", function($variables) {
 
 ```
  
+### Parameters
+ 
+If you need to add the parameters to url, you can. It will be passed to your handler as second parameter.
+```php
+$router->get("/test/<variable>/<next_variable>/path", function($variables, $params) {
+    // for url /test/example/showcase/path?optional=true&param=john will passed array $params look like:
+    // array(2) {
+    //     ["optional"] => string(4) "true"
+    //     ["param"] => string(4) "john"
+    //   }
+});
+
+```
+  
 ### Headers
 
-Sometimes is useful to know the request headers. You don't need to search it somewhere anymore. Just add second parameter to your handler function.
+Sometimes is useful to know the request headers. You don't need to search it somewhere anymore. Just add third parameter to your handler function.
 ```php
-$router->get("/test/<variable>/<next_variable>/path", function($variables, $headers) {
+$router->get("/test/<variable>/<next_variable>/path", function($variables, $params, $headers) {
     // variable $headers is array which contains all request headers 
 });
 
