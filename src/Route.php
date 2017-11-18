@@ -97,7 +97,7 @@ class Route
      *
      * @return array
      */
-    function matchedVariables() {
+    public function getMatchedVariables() {
         return array($this->matchedVariables);
     }
 

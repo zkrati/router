@@ -92,7 +92,8 @@ class SimpleRouter
             if($match){
                 $handler = $url->getHandler();
                 $params = array(
-                    $url->matchedVariables(),
+                    $url->getMatchedVariables(),
+                    $this->getParams(),
                     $this->getHeaders()
                 );
                 if($handler["type"] == "callable"){
@@ -135,7 +136,17 @@ class SimpleRouter
      * @return mixed
      */
     private function getPath() {
-        return rtrim(str_replace(str_replace("index.php", "", $_SERVER['PHP_SELF']), "/", $_SERVER['REQUEST_URI']), "/");
+        return rtrim(parse_url(rtrim(str_replace(str_replace("index.php", "", $_SERVER['PHP_SELF']), "/", $_SERVER['REQUEST_URI']), "/"))['path'], "/");
+    }
+
+    /**
+     * Get URI parameters
+     *
+     * @return mixed
+     */
+    private function getParams() {
+        parse_str(parse_url(rtrim(str_replace(str_replace("index.php", "", $_SERVER['PHP_SELF']), "/", $_SERVER['REQUEST_URI']), "/"))['query'], $parameters);
+        return $parameters;
     }
 
     /**
