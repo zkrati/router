@@ -198,7 +198,7 @@ class SimpleRouter
      *
      * @return string
      */
-    private function getMethod() {
+    public function getMethod() {
         return $_SERVER['REQUEST_METHOD'];
     }
 
