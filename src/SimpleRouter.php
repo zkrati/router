@@ -37,6 +37,17 @@ class SimpleRouter
     }
 
     /**
+     * Map a HEAD request to a handler
+     *
+     * @param string $pattern
+     * @param mixed $action
+     */
+    public function head($pattern, $action)
+    {
+        $this->controllers['HEAD'][] = new Route($pattern, $action);
+    }
+
+    /**
      * Map a POST request to a handler
      *
      * @param string $pattern
@@ -67,6 +78,39 @@ class SimpleRouter
     public function delete($pattern, $action)
     {
         $this->controllers['DELETE'][] = new Route($pattern, $action);
+    }
+
+    /**
+     * Map a CONNECT request to a handler
+     *
+     * @param string $pattern
+     * @param mixed $action
+     */
+    public function connect($pattern, $action)
+    {
+        $this->controllers['CONNECT'][] = new Route($pattern, $action);
+    }
+
+    /**
+     * Map a OPTIONS request to a handler
+     *
+     * @param string $pattern
+     * @param mixed $action
+     */
+    public function options($pattern, $action)
+    {
+        $this->controllers['OPTIONS'][] = new Route($pattern, $action);
+    }
+
+    /**
+     * Map a TRACE request to a handler
+     *
+     * @param string $pattern
+     * @param mixed $action
+     */
+    public function trace($pattern, $action)
+    {
+        $this->controllers['TRACE'][] = new Route($pattern, $action);
     }
 
     /**
