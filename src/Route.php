@@ -25,7 +25,7 @@ class Route
     /** Pattern for parsing variables from path string */
     const VARIABLE_PATTERN = '#<(.*?)>#';
 
-    /** Pattern for parsing variables from path string */
+    /** Pattern for parsing class and method from handler name */
     const CLASS_PATTERN = ':';
 
     /** Internal variable identifier */
@@ -36,6 +36,7 @@ class Route
      *
      * @param string $pattern
      * @param mixed $handler
+     * @throws InvalidHandlerException
      */
     public function __construct($pattern, $handler)
     {
@@ -139,7 +140,7 @@ class Route
         } else if(is_string($handler) AND strpos($handler, self::CLASS_PATTERN) !== false AND is_callable(explode(":", $handler))){
             return array(
                 "type" => "class",
-                "action" => explode(":", $handler)
+                "action" => explode(self::CLASS_PATTERN, $handler)
             );
         } else if(is_array($handler) AND is_object($handler[0]) AND is_callable($handler[1])){
             return array(
