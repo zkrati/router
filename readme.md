@@ -7,7 +7,7 @@ PHP router as simple as can be...
   - supports GET, POST, PUT, DELETE and PATCH requests
 
 ### Version
-0.5.1
+0.6.1
 
 
 ### Basic usage
@@ -69,6 +69,26 @@ $router->get("/test/<variable>/<next_variable>/path", function($variables, $para
     //   }
 });
 
+```
+ 
+### Url wildcards
+
+If you are in situation when you are interested only in first half of the path you can use a wildcard.
+```php
+$router->get("/test/path/*", "Class:methodName");
+// this code will match all paths starting /test/path/ for example:
+//  - /test/path/first
+//  - /test/path/second
+//  - /test/path/every/other/path
+```
+You can even use it as a wildcard for all requests, for example:
+```php
+$router->option("*", "Class:methodName");
+// This will handle all option requests
+```
+You can also combine it with variables:
+```php
+$router->get("/test/<variable>/*", "Class:methodName");
 ```
   
 ### Headers
