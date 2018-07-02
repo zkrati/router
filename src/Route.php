@@ -19,6 +19,9 @@ class Route
     /** @var string */
     private $path;
 
+    /** @var boolean */
+    private $wildcard = false;
+
     /** @var array */
     private $handler = [];
 
@@ -31,6 +34,9 @@ class Route
     /** Internal variable identifier */
     const VARIABLE = 'var:';
 
+    /** Pattern to determine whether there is wildcard in path string */
+    const WILDCARD_PATTERN = '*';
+
     /**
      * Route constructor.
      *
@@ -42,6 +48,7 @@ class Route
     {
         $this->path = $pattern;
         $this->pattern = $this->preparePattern($pattern);
+        $this->wildcard = $pattern == self::WILDCARD_PATTERN || in_array(self::WILDCARD_PATTERN, $this->pattern);
         $this->handler = $this->prepareHandler($handler);
     }
 
@@ -76,12 +83,20 @@ class Route
         $path = explode("/", $path);
         array_shift($path);
 
-        if(count($path) != count($this->pattern)){
+        if(!$this->wildcard AND count($path) != count($this->pattern)){
+            return false;
+        }
+
+        if($this->wildcard AND count($path) < count($this->pattern)){
             return false;
         }
 
         $variables = [];
         foreach($path as $key => $part){
+            if($this->pattern[$key] === self::WILDCARD_PATTERN || $this->pattern[$key] === NULL) {
+                break;
+            }
+
             if(strpos($this->pattern[$key], self::VARIABLE) === false AND $this->pattern[$key] != $part){
                 return false;
             } else if(strpos($this->pattern[$key], self::VARIABLE) !== false){
