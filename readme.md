@@ -120,7 +120,7 @@ also $router->run(); throws RouteNotFoundException when it founds no route for c
 ```php
 try{
     $router->run();
-} catch(Routing\RouteNotFoundException $e) {
+} catch(RouteNotFoundException $e) {
     echo $e->getMessage();
 }
 ```
