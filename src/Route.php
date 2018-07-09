@@ -125,7 +125,7 @@ class Route
      */
     private function preparePattern($pattern)
     {
-        $pattern = explode("/", rtrim($pattern, "/"));
+        $pattern = explode("/", strlen($pattern) > 1 ? rtrim($pattern, "/") : $pattern);
         array_shift($pattern);
 
         foreach($pattern as $key => $part){
