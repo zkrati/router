@@ -180,7 +180,22 @@ class SimpleRouter
      * @return mixed
      */
     private function getPath() {
-        return rtrim(parse_url(rtrim(str_replace(str_replace("index.php", "", $_SERVER['PHP_SELF']), "/", $_SERVER['REQUEST_URI']), "/"))['path'], "/");
+        $longestMatch = '';
+        $separator = '/';
+        $parts = array_reverse(explode($separator, $_SERVER['PHP_SELF']));
+
+        foreach ($parts as $part) {
+            $matchTest = $part . $separator . $match;
+            if(strpos($_SERVER['REQUEST_URI'], $matchTest) > 0){
+                $match = $matchTest;
+            }
+
+            if (!empty($part) && (strlen($match) > strlen($longestMatch))){
+                $longestMatch = $match;
+            }
+        }
+
+        return $separator . trim(substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], $longestMatch) + strlen($longestMatch)), "/");
     }
 
     /**
