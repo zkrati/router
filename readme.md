@@ -7,7 +7,7 @@ PHP router as simple as can be...
   - supports GET, POST, PUT, DELETE and PATCH requests
 
 ### Version
-0.6.1
+0.1
 
 
 ### Basic usage
